@@ -55,24 +55,30 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-
     JpegManipulator jpegManipulator;
+    // holds buffer validity variable into metadata struct; always executed successfully
     jpegManipulator.LoadFromJpegFile(vm["inputfile"].as<std::string>().c_str());
+    // always executed successfully; initialized, cannot be nullptr; metadata is valid
     auto metadataInfo = jpegManipulator.GetMetadata();
-    auto jpegBuffer = jpegManipulator.GetDataBuffer();
-    for (int index = 0; index < metadataInfo->width * metadataInfo->height * metadataInfo->components; index += 3) {
-        int diffAy = index / (metadataInfo->width * metadataInfo->components) - vm["AY"].as<int>();
-        int diffBy = index / (metadataInfo->width * metadataInfo->components) - vm["BY"].as<int>();
-        if ((diffAy >= 0) && (diffBy < 0)) {
-            int diffAx = index % (metadataInfo->width * metadataInfo->components) -
-                         metadataInfo->components * vm["AX"].as<int>();
-            int diffBx = index % (metadataInfo->width * metadataInfo->components) -
-                         metadataInfo->components * vm["BX"].as<int>();
-            if ((diffAx > 0) && (diffBx < 0)) {
-                jpegBuffer[index] *= vm["intensity"].as<double>();
+    if (metadataInfo->buffer_is_valid == true) {
+        auto jpegBuffer = jpegManipulator.GetDataBuffer();
+        for (int index = 0; index < metadataInfo->width * metadataInfo->height * metadataInfo->components; index += 3) {
+            int diffAy = index / (metadataInfo->width * metadataInfo->components) - vm["AY"].as<int>();
+            int diffBy = index / (metadataInfo->width * metadataInfo->components) - vm["BY"].as<int>();
+            if ((diffAy >= 0) && (diffBy < 0)) {
+                int diffAx = index % (metadataInfo->width * metadataInfo->components) -
+                             metadataInfo->components * vm["AX"].as<int>();
+                int diffBx = index % (metadataInfo->width * metadataInfo->components) -
+                             metadataInfo->components * vm["BX"].as<int>();
+                if ((diffAx > 0) && (diffBx < 0)) {
+                    jpegBuffer[index] *= vm["intensity"].as<double>();
+                }
             }
         }
+        //always executed successfully
+        jpegManipulator.SaveToJpegFile(vm["outputfile"].as<std::string>().c_str());
+    } else {
+        std::cerr << "LibJPEG wrapper: buffer status is illegal" << std::endl;
+        return -1;
     }
-    jpegManipulator.SaveToJpegFile(vm["outputfile"].as<std::string>().c_str());
-
 }
