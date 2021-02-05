@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     auto metadataInfo = jpegManipulator.GetMetadata();
     if (metadataInfo->buffer_is_valid == true) {
         auto jpegBuffer = jpegManipulator.GetDataBuffer();
-        for (int index = 0; index < metadataInfo->width * metadataInfo->height * metadataInfo->components; index += 3) {
+        for (unsigned int index = 0; index < metadataInfo->width * metadataInfo->height * metadataInfo->components; index += 3) {
             int diffAy = index / (metadataInfo->width * metadataInfo->components) - vm["AY"].as<int>();
             int diffBy = index / (metadataInfo->width * metadataInfo->components) - vm["BY"].as<int>();
             if ((diffAy >= 0) && (diffBy < 0)) {

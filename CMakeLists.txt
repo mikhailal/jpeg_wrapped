@@ -25,7 +25,7 @@ include_directories(jpeg_manipulator ${JMANIP_INTERFACE})
 
 swig_link_libraries(jpeg_manipulator ${Python3_LIBRARIES})
 swig_link_libraries(jpeg_manipulator ${JPEG_LIBRARIES})
-add_compile_options(-g -Werror)
+add_compile_options(-g -Werror -Wall)
 add_executable(testapp ${CMAKE_SOURCE_DIR}/src/main.cpp)
 target_link_libraries(testapp jpeg_manipulator)
 #workaround
