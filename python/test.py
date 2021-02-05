@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import jpeg_manipulator
-import sys
 import argparse
 
 def main():
