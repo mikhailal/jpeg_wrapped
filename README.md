@@ -23,14 +23,22 @@ cmake ..
 make
 make install
 
-To run test Py application:
+### To run test Py application:
 
+```
 cd ${GITROOT}/python
-
 ./test.py -h
+```
 
-To run test C++ application:
+### To run test C++ application:
 
+```
 cd ${GITROOT}/build
-
 ./testapp --help
+```
+
+###  Docker image
+You can get auto-built image from Dockerhub.
+https://hub.docker.com/r/mikhailmew/jpeg_wrapped
+
+```
